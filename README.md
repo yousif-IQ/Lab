@@ -141,4 +141,4 @@ Before a public deployment:
 
 ## License
 
-Add the license that matches your intended distribution before publishing a public release.
+No license file is included. The repository may be visible publicly on GitHub, but public visibility does not grant permission to copy, modify, or redistribute the code. Add an explicit open-source license if you want others to legally reuse it.
