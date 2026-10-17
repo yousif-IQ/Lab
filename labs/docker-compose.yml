@@ -1,0 +1,126 @@
+name: webforge-labs
+
+networks:
+  webforge-labs:
+    driver: bridge
+
+volumes:
+  labs-mariadb:
+
+services:
+  labs-db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_USER: ${LAB_DB_USER:-webforge}
+      MARIADB_PASSWORD: ${LAB_DB_PASSWORD:-webforge}
+      MARIADB_ROOT_PASSWORD: ${LAB_DB_ROOT_PASSWORD:-webforge-root}
+    volumes:
+      - labs-mariadb:/var/lib/mysql
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks: [webforge-labs]
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -u\"$$MARIADB_USER\" -p\"$$MARIADB_PASSWORD\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mutillidae:
+    build: {context: ./docker/php, dockerfile: Dockerfile.php, args: {APP_SOURCE_URL: https://github.com/webpwnized/mutillidae.git, APP_NAME: mutillidae}}
+    restart: unless-stopped
+    environment:
+      APP_NAME: mutillidae
+      APACHE_DOCROOT: /var/www/html/src
+      DB_USER: "${LAB_DB_USER:-webforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_HOST: labs-db
+    ports: ["8081:8080"]
+    networks: [webforge-labs]
+    depends_on: {labs-db: {condition: service_healthy}}
+
+  dvwa:
+    build: {context: ./docker/php, dockerfile: Dockerfile.php, args: {APP_SOURCE_URL: https://github.com/digininja/DVWA.git, APP_NAME: dvwa}}
+    restart: unless-stopped
+    environment:
+      APP_NAME: dvwa
+      DB_USER: "${LAB_DB_USER:-webforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_HOST: labs-db
+    ports: ["8082:8080"]
+    networks: [webforge-labs]
+    depends_on: {labs-db: {condition: service_healthy}}
+
+  bwapp:
+    build: {context: ./docker/php, dockerfile: Dockerfile.php, args: {APP_SOURCE_URL: https://github.com/iMoon07/bWAPPs.git, APP_NAME: bwapp}}
+    restart: unless-stopped
+    environment:
+      APP_NAME: bwapp
+      APACHE_DOCROOT: /var/www/html/bWAPP
+      DB_USER: "${LAB_DB_USER:-webforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_HOST: labs-db
+    ports: ["8083:8080"]
+    networks: [webforge-labs]
+    depends_on: {labs-db: {condition: service_healthy}}
+
+  xvwa:
+    build: {context: ./docker/php, dockerfile: Dockerfile.php, args: {APP_SOURCE_URL: https://github.com/s4n7h0/xvwa.git, APP_NAME: xvwa}}
+    restart: unless-stopped
+    environment:
+      APP_NAME: xvwa
+      DB_USER: "${LAB_DB_USER:-webforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_HOST: labs-db
+    ports: ["8084:8080"]
+    networks: [webforge-labs]
+    depends_on: {labs-db: {condition: service_healthy}}
+
+  vwa:
+    build: {context: ./docker/php, dockerfile: Dockerfile.php, args: {APP_SOURCE_URL: https://github.com/hummingbirdscyber/Vulnerable-Web-Application.git, APP_NAME: vwa}}
+    restart: unless-stopped
+    environment:
+      APP_NAME: vwa
+      DB_USER: "${LAB_DB_USER:-webforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_HOST: labs-db
+    ports: ["8085:8080"]
+    networks: [webforge-labs]
+    depends_on: {labs-db: {condition: service_healthy}}
+
+  juiceshop:
+    build: {context: ./docker/juiceshop, dockerfile: Dockerfile}
+    restart: unless-stopped
+    environment: {NODE_OPTIONS: --max-old-space-size=256}
+    ports: ["3000:3000"]
+    networks: [webforge-labs]
+
+  webgoat:
+    build: {context: ./docker/webgoat, dockerfile: Dockerfile}
+    restart: unless-stopped
+    environment: {WEBWOLF_HOST: webwolf, WEBWOLF_PORT: 9090, JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xmx512m}
+    ports: ["8086:8080"]
+    networks: [webforge-labs]
+
+  webwolf:
+    build: {context: ./docker/webwolf, dockerfile: Dockerfile}
+    restart: unless-stopped
+    environment: {WEBGOAT_HOST: webgoat, WEBGOAT_PORT: 8080, JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xmx256m}
+    ports: ["9090:9090"]
+    networks: [webforge-labs]
+    depends_on: [webgoat]
+
+  tomcat:
+    build: {context: ./docker/tomcat, dockerfile: Dockerfile}
+    restart: unless-stopped
+    environment:
+      TOMCAT_USER: "${TOMCAT_USER:-webforge}"
+      TOMCAT_PASS: "${TOMCAT_PASS:-webforge}"
+      JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xmx256m
+    ports: ["8088:8080"]
+    networks: [webforge-labs]
+
+  wrongsecrets:
+    build: {context: ./docker/wrongsecrets, dockerfile: Dockerfile}
+    restart: unless-stopped
+    ports: ["8091:8080"]
+    networks: [webforge-labs]

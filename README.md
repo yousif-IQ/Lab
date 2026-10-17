@@ -91,6 +91,16 @@ Remove the local database volume too:
 docker compose down -v
 ```
 
+## Real vulnerable lab stack
+
+The `labs/` directory contains the actual web applications behind the challenge catalog. Start them separately from the platform API:
+
+```powershell
+docker compose -f labs/docker-compose.yml up --build -d
+```
+
+The real lab URLs and troubleshooting commands are documented in [labs/README.md](labs/README.md). Keep these intentionally vulnerable services on localhost only.
+
 ## API reference
 
 All API routes are prefixed with `/api`.
