@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="WebForge CTF — منصة تدريب ويب مستوحاة من OWASP AttackForge" />
+  <title>WebForge CTF · مختبرات أمن الويب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .operator-label{font:9px "Space Grotesk",sans-serif;letter-spacing:.08em;color:#738277;border-right:1px solid #29332e;padding-right:12px}
+    .credit{color:#9eaea2}.credit b{color:#c8ff4d;font-weight:600}
+    @media(max-width:800px){.operator-label{display:none}.footer{gap:16px}}
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="WebForge CTF">
+      <span class="brand-mark">⌁</span><span>WEB<span class="accent">FORGE</span></span><small>CTF</small>
+    </a>
+    <nav class="nav-links" aria-label="التنقل الرئيسي">
+      <a class="active" href="#challenges">التحديات</a><a href="#leaderboard">لوحة المتصدرين</a><a href="#how">كيف تعمل؟</a>
+    </nav>
+    <div class="top-actions"><span class="live-dot"></span><span class="live-label">المختبرات تعمل</span><span class="operator-label">OPERATOR / YOUSIF</span><button class="profile-btn" id="profileBtn">YW</button></div>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span>#01</span> WEB SECURITY RANGE</p>
+        <h1>اكسر. تعلّم.<br><em>تفوّق.</em></h1>
+        <p class="hero-text">منصة CTF عملية تجمع تحديات أمن الويب وواجهات API في مسار واحد. ابدأ من الأساسيات، واصنع سجلّك الهجومي خطوة بعد خطوة.</p>
+        <div class="hero-actions"><a class="primary-btn" href="#challenges">ابدأ أول تحدي <span>←</span></a><a class="text-btn" href="#how">استكشف المنهج <span>↗</span></a></div>
+        <div class="hero-meta"><span><b>18</b> لاب ضعيف</span><i></i><span><b>74</b> تحدي عملي</span><i></i><span><b>6</b> مسارات</span></div>
+      </div>
+      <div class="hero-visual" aria-label="حالة المنصة">
+        <div class="orb orb-a"></div><div class="orb orb-b"></div>
+        <div class="terminal-card"><div class="terminal-head"><span class="terminal-dots">● ● ●</span><span>webforge://mission-control</span><span>⌘</span></div><div class="terminal-body"><p><span class="cyan">$</span> connect <span class="green">--range webforge</span></p><p class="muted">initializing isolated targets...</p><p><span class="green">✓</span> 18 targets online</p><p><span class="green">✓</span> scoring engine ready</p><p><span class="green">✓</span> flag validator ready</p><p class="cursor"><span class="cyan">$</span> <span class="blink">_</span></p></div></div>
+        <div class="float-tag tag-top"><span class="tag-icon">◈</span><span><b>LIVE</b><small>24 / 7 LABS</small></span></div>
+        <div class="float-tag tag-bottom"><strong>01</strong><span>YOUR<br>JOURNEY</span></div>
+      </div>
+    </section>
+
+    <section class="stats-strip shell" aria-label="إحصائيات التقدم">
+      <div><span class="stat-label">التقدم الكلي</span><strong id="progressText">0%</strong><div class="progress"><span id="progressBar"></span></div></div>
+      <div><span class="stat-label">النقاط</span><strong id="scoreText">0 <small>/ 7,400</small></strong></div>
+      <div><span class="stat-label">تحديات محلولة</span><strong id="solvedText">0 <small>/ 74</small></strong></div>
+      <div class="streak"><span class="stat-label">سلسلة النشاط</span><strong>01 <small>يوم</small> <span class="fire">✦</span></strong></div>
+    </section>
+
+    <section class="challenge-section shell" id="challenges">
+      <div class="section-head"><div><p class="eyebrow">// SELECT YOUR TARGET</p><h2>مركز التحديات <span>↘</span></h2></div><div class="view-toggle"><button class="selected" data-view="grid">▦</button><button data-view="list">☷</button></div></div>
+      <div class="filter-row"><div class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="ابحث عن تحدي، ثغرة أو تطبيق..." /></div><div class="filters" id="filters"><button class="filter active" data-filter="all">الكل <b>74</b></button><button class="filter" data-filter="web">Web <b>42</b></button><button class="filter" data-filter="api">API <b>18</b></button><button class="filter" data-filter="auth">Auth <b>08</b></button><button class="filter" data-filter="advanced">Advanced <b>06</b></button></div></div>
+      <div class="challenge-grid" id="challengeGrid"></div>
+      <div class="empty-state" id="emptyState" hidden>لا توجد تحديات مطابقة. جرّب بحثًا أو تصنيفًا آخر.</div>
+      <button class="load-btn" id="loadBtn">عرض جميع التحديات <span>↓</span></button>
+    </section>
+
+    <section class="lower-grid shell" id="leaderboard">
+      <div class="leader-card"><div class="card-heading"><div><p class="eyebrow">// TOP OPERATORS</p><h2>لوحة المتصدرين</h2></div><span class="season">SEASON 01</span></div><div class="leader-row first"><span class="rank">01</span><span class="avatar lime">NX</span><span class="person"><b>NullByte</b><small>Web Hunter</small></span><strong>6,850 <small>pts</small></strong></div><div class="leader-row"><span class="rank">02</span><span class="avatar purple">0X</span><span class="person"><b>0xShadow</b><small>API Breaker</small></span><strong>6,420 <small>pts</small></strong></div><div class="leader-row"><span class="rank">03</span><span class="avatar orange">RA</span><span class="person"><b>red_aria</b><small>Payload Crafter</small></span><strong>5,980 <small>pts</small></strong></div><div class="leader-row you"><span class="rank">—</span><span class="avatar you-avatar">AA</span><span class="person"><b>أنت</b><small>Rookie Operator</small></span><strong id="leaderScore">0 <small>pts</small></strong></div></div>
+      <div class="path-card" id="how"><p class="eyebrow">// YOUR ROADMAP</p><h2>طريقك إلى <em>Pro</em></h2><p>كل تحدي يفتح لك مهارة جديدة. لا تحفظ الحل—افهم السلسلة.</p><div class="roadmap"><div class="road-step done"><span>01</span><b>Recon</b><small>اكتشاف السطح</small></div><div class="road-line"></div><div class="road-step current"><span>02</span><b>Exploit</b><small>استغلال الثغرة</small></div><div class="road-line"></div><div class="road-step"><span>03</span><b>Chain</b><small>بناء السلسلة</small></div></div><a href="#challenges" class="path-link">ابدأ المسار الأساسي <span>→</span></a></div>
+    </section>
+  </main>
+
+  <footer class="footer shell"><div class="brand"><span class="brand-mark">⌁</span><span>WEB<span class="accent">FORGE</span></span><small>CTF</small></div><span>مختبر محلي للتدريب الآمن · مستوحى من OWASP AttackForge</span><span class="credit">MADE BY <b>YOUSIF WAZNI</b></span><span>BUILD 01.24 <span class="green">●</span></span></footer>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden><div class="challenge-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="close-btn" id="closeModal">×</button><div class="modal-kicker" id="modalKicker">WEB · EASY</div><h2 id="modalTitle">تحدي</h2><p id="modalDescription"></p><div class="objective"><span>▣</span><div><b>المهمة</b><p id="modalObjective"></p></div></div><div class="flag-box"><label for="flagInput">أدخل الـ Flag</label><div><input id="flagInput" placeholder="WF{...}" autocomplete="off"/><button id="submitFlag">تحقق</button></div><small id="flagFeedback">التحدي يعمل محليًا للتجربة — جرّب الـFlag الموضح في التلميح.</small></div><button class="hint-btn" id="hintBtn">إظهار التلميح <span>⌄</span></button><p class="hint" id="hintText" hidden></p></div></div>
+  <script src="app.js"></script>
+</body>
+</html>
