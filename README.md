@@ -1,13 +1,13 @@
-# WebForge CTF
+# LabForge CTF
 
-WebForge CTF is a local web-security training range inspired by OWASP AttackForge. It presents vulnerable web and API labs as a CTF-style experience with challenges, flags, scoring, progress tracking, and a leaderboard.
+LabForge CTF is a local web-security training range inspired by OWASP AttackForge. It presents vulnerable web and API labs as a CTF-style experience with challenges, flags, scoring, progress tracking, and a leaderboard.
 
 **Made by Yousif Wazni**
 
 ## Project layout
 
 ```text
-webforge-ctf/
+labforge-ctf/
 ├── index.html              # Frontend shell
 ├── styles.css              # Dark operator-console theme
 ├── app.js                  # Challenge catalog and browser interactions

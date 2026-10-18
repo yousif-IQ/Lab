@@ -1,4 +1,4 @@
-# WebForge Real Web Labs
+# LabForge Real Web Labs
 
 This directory contains the real vulnerable web applications used by the platform. They run on a private Docker bridge network and are exposed only on localhost.
 

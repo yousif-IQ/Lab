@@ -1,7 +1,7 @@
-name: webforge-labs
+name: labforge-labs
 
 networks:
-  webforge-labs:
+  labforge-labs:
     driver: bridge
 
 volumes:
@@ -12,13 +12,13 @@ services:
     image: mariadb:11.4
     restart: unless-stopped
     environment:
-      MARIADB_USER: ${LAB_DB_USER:-webforge}
-      MARIADB_PASSWORD: ${LAB_DB_PASSWORD:-webforge}
-      MARIADB_ROOT_PASSWORD: ${LAB_DB_ROOT_PASSWORD:-webforge-root}
+      MARIADB_USER: ${LAB_DB_USER:-labforge}
+      MARIADB_PASSWORD: ${LAB_DB_PASSWORD:-labforge}
+      MARIADB_ROOT_PASSWORD: ${LAB_DB_ROOT_PASSWORD:-labforge-root}
     volumes:
       - labs-mariadb:/var/lib/mysql
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     healthcheck:
       test: ["CMD-SHELL", "mariadb-admin ping -u\"$$MARIADB_USER\" -p\"$$MARIADB_PASSWORD\""]
       interval: 10s
@@ -31,11 +31,11 @@ services:
     environment:
       APP_NAME: mutillidae
       APACHE_DOCROOT: /var/www/html/src
-      DB_USER: "${LAB_DB_USER:-webforge}"
-      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_USER: "${LAB_DB_USER:-labforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-labforge}"
       DB_HOST: labs-db
     ports: ["8081:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     depends_on: {labs-db: {condition: service_healthy}}
 
   dvwa:
@@ -43,11 +43,11 @@ services:
     restart: unless-stopped
     environment:
       APP_NAME: dvwa
-      DB_USER: "${LAB_DB_USER:-webforge}"
-      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_USER: "${LAB_DB_USER:-labforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-labforge}"
       DB_HOST: labs-db
     ports: ["8082:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     depends_on: {labs-db: {condition: service_healthy}}
 
   bwapp:
@@ -56,11 +56,11 @@ services:
     environment:
       APP_NAME: bwapp
       APACHE_DOCROOT: /var/www/html/bWAPP
-      DB_USER: "${LAB_DB_USER:-webforge}"
-      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_USER: "${LAB_DB_USER:-labforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-labforge}"
       DB_HOST: labs-db
     ports: ["8083:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     depends_on: {labs-db: {condition: service_healthy}}
 
   xvwa:
@@ -68,11 +68,11 @@ services:
     restart: unless-stopped
     environment:
       APP_NAME: xvwa
-      DB_USER: "${LAB_DB_USER:-webforge}"
-      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_USER: "${LAB_DB_USER:-labforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-labforge}"
       DB_HOST: labs-db
     ports: ["8084:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     depends_on: {labs-db: {condition: service_healthy}}
 
   vwa:
@@ -80,11 +80,11 @@ services:
     restart: unless-stopped
     environment:
       APP_NAME: vwa
-      DB_USER: "${LAB_DB_USER:-webforge}"
-      DB_PASS: "${LAB_DB_PASSWORD:-webforge}"
+      DB_USER: "${LAB_DB_USER:-labforge}"
+      DB_PASS: "${LAB_DB_PASSWORD:-labforge}"
       DB_HOST: labs-db
     ports: ["8085:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     depends_on: {labs-db: {condition: service_healthy}}
 
   juiceshop:
@@ -92,35 +92,35 @@ services:
     restart: unless-stopped
     environment: {NODE_OPTIONS: --max-old-space-size=256}
     ports: ["3000:3000"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
 
   webgoat:
     build: {context: ./docker/webgoat, dockerfile: Dockerfile}
     restart: unless-stopped
     environment: {WEBWOLF_HOST: webwolf, WEBWOLF_PORT: 9090, JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xmx512m}
     ports: ["8086:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
 
   webwolf:
     build: {context: ./docker/webwolf, dockerfile: Dockerfile}
     restart: unless-stopped
     environment: {WEBGOAT_HOST: webgoat, WEBGOAT_PORT: 8080, JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xmx256m}
     ports: ["9090:9090"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
     depends_on: [webgoat]
 
   tomcat:
     build: {context: ./docker/tomcat, dockerfile: Dockerfile}
     restart: unless-stopped
     environment:
-      TOMCAT_USER: "${TOMCAT_USER:-webforge}"
-      TOMCAT_PASS: "${TOMCAT_PASS:-webforge}"
+      TOMCAT_USER: "${TOMCAT_USER:-labforge}"
+      TOMCAT_PASS: "${TOMCAT_PASS:-labforge}"
       JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -XX:TieredStopAtLevel=1 -Xmx256m
     ports: ["8088:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]
 
   wrongsecrets:
     build: {context: ./docker/wrongsecrets, dockerfile: Dockerfile}
     restart: unless-stopped
     ports: ["8091:8080"]
-    networks: [webforge-labs]
+    networks: [labforge-labs]

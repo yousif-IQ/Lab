@@ -16,4 +16,4 @@ yarn-error.log*
 .idea/
 
 # Runtime state
-webforge_pg/
+labforge_pg/
